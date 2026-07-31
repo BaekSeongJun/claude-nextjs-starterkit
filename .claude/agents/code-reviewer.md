@@ -20,61 +20,9 @@ model: sonnet
 
 ## 리뷰 기준
 
-### 1. Bug & Edge Cases (치명적 문제)
-- **null/undefined 검사 누락** — 예: `user?.name` vs `user.name` (runtime 에러 위험)
-- **Next.js 16 breaking change: `params`/`searchParams`는 항상 Promise** — `await` 또는 `use()` 필수 (동기 접근 금지)
-  - ❌ `<ServerComponent> {params.id}` → 동기 접근 (컴파일 에러)
-  - ✅ `<ServerComponent> {await params.id}` or `<ClientComponent> {use(params).id}`
-- **zod 스키마 검증 누락** — 폼 필드가 `loginSchema` 등으로 정의되지 않은 경우
-- **컴포넌트 구조 원칙 위반** — L1~L4 4-레이어 계층 구조 위반 (아래 "Architecture" 섹션 참조)
+이 에이전트는 다음 리뷰 기준을 따릅니다: [코드 리뷰 기준](../docs/review-criteria.md) 문서를 참고하세요.
 
-### 2. Performance & Optimizations
-- **불필요한 리렌더링**: 컴포넌트가 `'use client'`인데도 매 렌더링마다 새로운 함수/객체 생성 (클로저 캡처 실패)
-- **useEffect 의존성 배열 누락 또는 불완전** — 예: `useEffect(() => {...}, [])` vs `useEffect(() => {...}, [deps])` (무한 루프 위험)
-- **큰 리스트 렌더링 시 `key` prop 누락 또는 인덱스 사용** (DOM 재조정 비효율)
-- **큰 번들 임포트**: 예: `import _ from 'lodash'` 대신 `import { debounce } from 'lodash'` (tree-shaking 고려)
-
-### 3. Security & Data Handling
-- **하드코딩된 시크릿** (API 키, 토큰) — `.env*`가 아닌 코드에 직접 포함
-- **`NEXT_PUBLIC_` 환경변수 오남용** — 브라우저에 노출되면 안 되는 민감 값(API 비밀키, 데이터베이스 URL 등)을 `NEXT_PUBLIC_` 접두사로 선언
-- **react-hook-form + zod 검증 우회** — `onSubmit` 핸들러가 Zod validation을 거치지 않고 사용자 입력을 직접 처리하거나, 폼 검증 결과를 무시하고 진행
-- **사용자 입력 값을 바로 DOM에 렌더링** (XSS 위험) — React는 자동 escape하지만 `dangerouslySetInnerHTML` 사용 시 주의
-
-### 4. Readability & Architecture
-
-#### 4-1. 컴포넌트 레이어 구조 준수 (CLAUDE.md 정의)
-이 프로젝트는 4-레이어 아키텍처를 따릅니다. 각 레이어의 책임 이탈을 체크:
-
-- **L1: Primitives** (`components/ui/`) — shadcn/ui CLI로 생성된 저수준 컴포넌트 (Button, Input, Field 등)
-  - ❌ 금지: 이 디렉토리 직접 수정. CLI 업데이트가 덮어씌움.
-  - ✅ 권장: L2에서 래퍼 컴포넌트 만들어 커스터마이징
-  - 예시 위반: `components/ui/field.tsx`를 폼 로직으로 확장 → L2 컴포넌트로 옮길 것
-
-- **L2: Composites** (`components/forms/`, 단일 도메인 컴포넌트)
-  - 책임: 2개 이상의 L1 컴포넌트 조합 + 도메인 로직 (react-hook-form, zod 검증)
-  - 예: `LoginForm`는 Input + Button + Field 등을 조합하고 `loginSchema` 검증 처리
-  - ❌ 위반: L2가 라우팅, 레이아웃 로직 처리하거나 L4(page)에만 쓸 특수 마크업 포함
-
-- **L3: Layouts** (`components/layout/`) — 반복되는 페이지 구조 (Header, Footer, Nav)
-  - 책임: 여러 페이지가 공유하는 UI 쉘
-  - 특별 규칙: `nav-items.ts`가 **단일 소스** → `main-nav.tsx`와 `mobile-nav.tsx` 모두 이것을 import해야 함 (하드코딩 금지)
-  - ❌ 위반: nav 항목을 `site-header.tsx`에 또 따로 정의
-
-- **L4: Pages** (`app/**/page.tsx`) — Next.js 라우트, L3+L2 조합
-  - 책임: 라우팅, params 처리 (`await params`), 페이지 조립
-  - ❌ 위반: 폼 검증 로직(L2 책임) 또는 공유 nav(L3 책임) 재구현
-
-#### 4-2. 코드 품질
-- **네이밍**: camelCase 변수/함수, PascalCase 컴포넌트 (TypeScript 컨벤션)
-- **함수 길이**: 단일 책임 원칙 — 너무 긴 컴포넌트는 하위 컴포넌트/커스텀 훅으로 분리
-- **주석**: 명시하지 않아도 코드 자체가 명확하면 주석 불필요. 왜냐는 상황에만 (숨은 제약, 차선책 이유 등)
-- **타입 안전성**: TypeScript를 활용하되, `any` 사용 자제. 필요하면 제네릭으로 정확히 선언
-
-#### 4-3. Next.js 16 특화
-- `params`/`searchParams`는 **Promise** (v16 breaking change)
-  - 동적 라우트(`[slug]`) 추가 시 반드시 `await` 또는 `use()` 사용
-- 동적 라우트(`[slug]`) 추가 시 `generateStaticParams()` 고려 (ISR/SSG 성능)
-- `middleware.ts` 없음 → 엣지 런타임 기능이 필요하면 `proxy.ts` 사용 (문서 확인 필수)
+리뷰 기준에 포함된 내용: Bug & Edge Cases, Performance & Optimizations, Security & Data Handling, Readability & Architecture (4-1~4-3), 4-레이어 컴포넌트 레이어 구조 준수.
 
 ## 출력 포맷
 

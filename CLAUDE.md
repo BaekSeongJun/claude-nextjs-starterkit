@@ -12,22 +12,7 @@
 
 ## 빠른 시작
 
-### 필수 명령어
-
-```bash
-# 개발
-npm run dev              # Turbopack 개발 서버 시작 (http://localhost:3000)
-
-# 프로덕션
-npm run build            # 배포용 빌드
-npm run start            # 프로덕션 서버 시작
-
-# 코드 품질
-npm run lint             # ESLint (Next.js core-web-vitals + TypeScript 설정)
-
-# 컴포넌트
-npx shadcn add <name> -y # shadcn/ui 컴포넌트 추가 (예: "table", "dialog")
-```
+개발, 빌드, 린트 등 자주 사용하는 명령어는 [commands.md](./.claude/docs/commands.md)를 참고하세요.
 
 **주의:** 이 프로젝트에는 테스트 러너가 설정되지 않았습니다. 필요하면 Jest/Vitest를 추가하세요.
 

@@ -55,20 +55,13 @@ lib/
 
 ### 계층 구조 설명
 
-- **L1 Primitive** (`components/ui/`): 더 이상 쪼갤 수 없는 단일 UI 단위. shadcn CLI로 설치된 그대로 사용.
-- **L2 Composite** (`components/forms/`, 메뉴 데이터): 2개 이상의 Primitive를 조합한 상호작용 패턴. 프로젝트 도메인에 맞춤.
-- **L3 Layout** (`components/layout/`): 모든 페이지를 감싸는 반복되는 뼈대 (헤더/푸터).
-- **L4 Page** (`app/**/page.tsx`): 실제 라우트에 대응하는 화면.
-- **Providers**: 전역 컨텍스트 (테마 등).
-- **Utility/Validation**: UI가 아닌 순수 로직.
+자세한 계층 구조 설계 근거는 [.claude/docs/architecture.md](./.claude/docs/architecture.md)를 참고하세요.
 
 ## 개발 서버 시작
 
-```bash
-npm run dev
-```
+자세한 명령어는 [.claude/docs/commands.md](./.claude/docs/commands.md)를 참고하세요.
 
-[http://localhost:3000](http://localhost:3000)에서 확인할 수 있습니다.
+개발 서버는 `npm run dev`로 시작하며, [http://localhost:3000](http://localhost:3000)에서 확인할 수 있습니다.
 
 ## 주요 기능
 
@@ -97,11 +90,7 @@ npm run dev
 - 1군(필수): `card`, `badge`, `separator`, `dropdown-menu`, `sonner`, `input`, `label`, `sheet`, `navigation-menu`
 - 2군(권장): `field`
 
-### 새로운 컴포넌트 추가 예시
-
-```bash
-npx shadcn add <component-name> -y
-```
+새로운 컴포넌트 추가 명령어는 [.claude/docs/commands.md](./.claude/docs/commands.md#컴포넌트-라이브러리-관리)를 참고하세요.
 
 ### 3군 확장 컴포넌트 (향후 필요시 추가)
 
@@ -117,16 +106,7 @@ npx shadcn add <component-name> -y
 
 ## 빌드 및 배포
 
-```bash
-npm run build
-npm run start
-```
-
-## 타입 체크 및 린트
-
-```bash
-npm run lint
-```
+자세한 명령어는 [.claude/docs/commands.md](./.claude/docs/commands.md)를 참고하세요.
 
 ## 주의사항
 
