@@ -148,8 +148,23 @@ The codebase follows a **4-layer component hierarchy** + **utilities/validation*
 
 ---
 
+## Code Review Workflow
+
+After implementing or modifying any code in this repository (new components, pages, form logic, etc.), invoke the `code-reviewer` subagent via the Task tool before considering the work complete:
+
+```
+Task(subagent_type: "code-reviewer", prompt: "Review the changes I just made to <files>")
+```
+
+- The subagent is **read-only** (Read/Grep/Glob only) — it reports findings, it does not edit files. Apply its suggested fixes yourself via Edit after reviewing them.
+- This is **separate** from `/code-review:staff`, which is a slash command for on-demand, interactive review (and can apply fixes directly). Use the `code-reviewer` subagent as the default self-check after finishing a task; use `/code-review:staff` when the user explicitly asks for a review session.
+- Skip this step only for trivial, non-functional changes (e.g., typo fixes in comments, README edits).
+
+---
+
 ## See Also
 
 - **README.md** — Full feature overview, shadcn component library reference, and deployment guides
 - **AGENTS.md** — Robot AI-specific directives (read before using automated tools)
+- **.claude/agents/code-reviewer.md** — Read-only code review subagent definition; automatically reports architecture, security, and performance issues
 - **next.config.ts** — Next.js configuration (currently minimal; add custom webpack/Turbopack settings here if needed)
