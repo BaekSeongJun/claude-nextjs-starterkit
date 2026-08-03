@@ -42,4 +42,5 @@ next-env.d.ts
 
 # claude code (local and tool artifacts)
 .claude/settings.local.json
+.claude/hooks/
 .playwright-mcp/
