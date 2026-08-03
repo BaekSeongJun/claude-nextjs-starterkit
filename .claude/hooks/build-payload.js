@@ -40,15 +40,15 @@ process.stdin.on('end', () => {
     } else if (eventType === 'stop') {
       emoji = ':white_check_mark:';
       username = 'CompleteBot';
-      detail = '세션이 종료되었습니다.';
+      detail = 'Session ended.';
     } else {
       process.exit(0);
     }
 
     const sessionId = hookInput.session_id || 'unknown';
 
-    // Slack 메시지 조합
-    const text = `${emoji} ${projectName} | ${eventType}\n시각: ${timestamp}\n${detail}\n(Session: ${sessionId})`;
+    // Slack message
+    const text = `${emoji} ${projectName} | ${eventType}\nTime: ${timestamp}\n${detail}\n(Session: ${sessionId})`;
 
     // Slack Webhook payload
     const payload = {
