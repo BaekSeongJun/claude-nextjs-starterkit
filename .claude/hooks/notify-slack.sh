@@ -2,8 +2,10 @@
 set -euo pipefail
 
 # UTF-8 강제 + Windows 콘솔 코드페이지 강제 전환
+# stdin(< /dev/null)을 명시적으로 분리해야 함 — 그러지 않으면 cmd.exe가
+# 부모 Bash의 stdin을 가로채 뒤에 오는 cat이 빈 스트림을 받는다
 export LC_ALL=C.UTF-8
-cmd.exe /c "chcp 65001" > /dev/null 2>&1 || true
+cmd.exe /c "chcp 65001" < /dev/null > /dev/null 2>&1 || true
 
 # stdin에서 JSON 읽기 (hook으로부터 받은 원본) — 최우선
 HOOK_INPUT="$(cat)"
