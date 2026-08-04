@@ -53,4 +53,13 @@ EOF
 # Node.js가 payload 생성과 Slack 전송까지 전부 처리
 echo "$INPUT_FOR_NODE" | node "$SCRIPT_DIR/send-slack.js" 2>/dev/null || true
 
+# 디버그: notification 이벤트 페이로드 로깅 (권한 요청 시에만 동작)
+if [[ "$EVENT_TYPE" == "notification" ]]; then
+  echo "=== Notification Hook Fired ===" >> "$SCRIPT_DIR/notification-debug.log"
+  echo "Timestamp: $(date '+%Y-%m-%d %H:%M:%S')" >> "$SCRIPT_DIR/notification-debug.log"
+  echo "Payload:" >> "$SCRIPT_DIR/notification-debug.log"
+  echo "$INPUT_FOR_NODE" | node -e "console.log(JSON.stringify(JSON.parse(require('fs').readFileSync(0,'utf-8')), null, 2))" >> "$SCRIPT_DIR/notification-debug.log" 2>&1 || true
+  echo "" >> "$SCRIPT_DIR/notification-debug.log"
+fi
+
 exit 0
