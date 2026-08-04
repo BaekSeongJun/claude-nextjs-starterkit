@@ -7,7 +7,7 @@ allowed-tools:
     "Bash(git commit:*)",
     "Bash(git diff:*)",
     "Bash(git log:*)",
-  ]
+]
 ---
 
 # Claude 명령어: Commit

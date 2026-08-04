@@ -43,4 +43,9 @@ next-env.d.ts
 # claude code (local and tool artifacts)
 .claude/settings.local.json
 .claude/hooks/.env
+.claude/hooks/*.log
 .playwright-mcp/
+
+# test & debug artifacts
+hook-test.txt
+test.txt
