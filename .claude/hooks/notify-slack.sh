@@ -5,6 +5,9 @@ set -euo pipefail
 export LC_ALL=C.UTF-8
 cmd.exe /c "chcp 65001" > /dev/null 2>&1 || true
 
+# stdin에서 JSON 읽기 (hook으로부터 받은 원본) — 최우선
+HOOK_INPUT="$(cat)"
+
 # 스크립트 디렉토리
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
@@ -22,9 +25,6 @@ fi
 
 # 이벤트 타입 (notification 또는 stop)
 EVENT_TYPE="${1:-}"
-
-# stdin에서 JSON 읽기 (hook으로부터 받은 원본)
-HOOK_INPUT="$(cat)"
 
 # Node.js 미설치 확인
 if ! command -v node &> /dev/null; then

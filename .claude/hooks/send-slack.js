@@ -101,8 +101,16 @@ process.stdin.on('end', () => {
       });
     });
 
+    req.on('socket', (socket) => {
+      socket.setTimeout(5000);
+      socket.on('timeout', () => {
+        req.destroy();
+      });
+    });
+
     req.on('error', (err) => {
-      console.error(`[send-slack] 전송 오류: ${err.message}`);
+      console.error(`[send-slack] Error: ${err.message}`);
+      console.error(`[send-slack] Full error:`, err);
       process.exit(0); // 훅 메커니즘 방해 금지
     });
 
