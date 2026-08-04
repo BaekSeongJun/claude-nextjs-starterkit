@@ -28,6 +28,16 @@ npx shadcn add <name> -y # shadcn/ui 컴포넌트 추가
 # npx shadcn add dialog -y
 ```
 
+## 커스텀 슬래시 커맨드
+
+Claude Code 내에서 `/` 프리픽스로 실행하는 프로젝트 특화 커맨드입니다. 각 커맨드의 상세 동작(입력 파라미터, 프로세스, 출력 포맷)은 링크된 정의 파일을 참고하세요.
+
+| 커맨드 | 용도 | 정의 |
+|---|---|---|
+| `/code-review:staff` | Staff 엔지니어 관점 코드 리뷰 (git diff 대상, 승인 시 자동 수정) | [`.claude/commands/code-review/staff.md`](../../.claude/commands/code-review/staff.md) |
+| `/commit` | 이모지 + 컨벤셔널 포맷 커밋 생성 | [`.claude/commands/git/commit.md`](../../.claude/commands/git/commit.md) |
+| `/deploy:preflight` | 배포 전 자동 검증 + 수동 확인 체크리스트 | [`.claude/commands/deploy/preflight.md`](../../.claude/commands/deploy/preflight.md) |
+
 ---
 
 ## 중요한 주의사항

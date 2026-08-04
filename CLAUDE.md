@@ -37,13 +37,28 @@
 5. **[자주 사용하는 명령어 & 운영](./.claude/docs/commands.md)**  
    *개발 워크플로, 중요한 주의사항(L1 금지, 폼 백엔드 스텁, 테스트 없음), 트러블슈팅*
 
+6. **[코드 리뷰 기준](./.claude/docs/review-criteria.md)**  
+   *Bug/Performance/Security/Architecture 4대 리뷰 기준, 4-레이어 아키텍처 준수 체크*
+
+7. **[Slack 모바일 알림 설정](./.claude/docs/slack-notification-setup.md)**  
+   *권한 요청/작업 완료 시 Slack 모바일 알림 훅 설정 가이드*
+
 ---
 
 ## 참고 자료
 
 - **README.md** — 전체 기능 개요, shadcn 컴포넌트 라이브러리 참고, 배포 가이드
 - **AGENTS.md** — AI용 전역 지시사항 (자동 관리 파일)
-- **.claude/agents/code-reviewer.md** — 읽기 전용 코드 리뷰 서브에이전트 정의; 아키텍처, 보안, 성능을 Staff Engineer 관점에서 검토
+
+### 서브에이전트 (읽기 전용 진단 에이전트)
+- **.claude/agents/code-reviewer.md** — 읽기 전용 코드 리뷰 서브에이전트 정의; 아키텍처, 보안, 성능을 Staff Engineer 관점에서 검토. 리뷰 기준은 [코드 리뷰 기준](./.claude/docs/review-criteria.md) 참고
 - **.claude/agents/debugger.md** — 근본 원인 분석(RCA) 서브에이전트; 버그를 출처까지 추적하며 Next.js 16에 특화
 - **.claude/agents/test-runner.md** — QA & 테스트 진단 서브에이전트; Production Bug vs Test Setup Issue 분류
+
+### 커스텀 슬래시 커맨드 (상호작용형 워크플로)
+- **.claude/commands/code-review/staff.md** — `/code-review:staff` 커맨드; git diff 기반 코드 리뷰 + 승인 시 자동 수정 (상세 동작은 `.claude/docs/commands.md` 참고)
+- **.claude/commands/git/commit.md** — `/commit` 커맨드; 이모지 + 컨벤셔널 포맷 커밋 생성
+- **.claude/commands/deploy/preflight.md** — `/deploy:preflight` 커맨드; 배포 전 자동 검증 + 수동 확인 체크리스트 (프로젝트 실제 구성 반영)
+
+### 기타
 - **next.config.ts** — Next.js 설정 (현재 최소 설정; 필요하면 커스텀 webpack/Turbopack 설정 추가)
