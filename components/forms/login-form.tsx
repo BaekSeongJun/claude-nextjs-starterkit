@@ -1,5 +1,6 @@
 "use client"
 
+import { useState } from "react"
 import Link from "next/link"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -23,16 +24,31 @@ import {
   FieldLabel,
 } from "@/components/ui/field"
 import { loginSchema, type LoginValues } from "@/lib/validations/login"
+import { loginUser } from "@/lib/auth-storage"
 
 export function LoginForm() {
+  const [isLoading, setIsLoading] = useState(false)
   const form = useForm<LoginValues>({
     resolver: zodResolver(loginSchema),
     defaultValues: { email: "", password: "" },
   })
 
-  function onSubmit(values: LoginValues) {
-    console.log(values)
-    toast.success("로그인 폼 검증 성공 (데모)")
+  async function onSubmit(values: LoginValues) {
+    setIsLoading(true)
+    try {
+      const result = loginUser(values.email, values.password)
+      if (result.success) {
+        toast.success("로그인되었습니다!")
+        form.reset()
+        // 실제 앱에서는 여기서 리다이렉트 (예: router.push("/dashboard"))
+      } else {
+        toast.error(result.error || "로그인에 실패했습니다.")
+      }
+    } catch (error) {
+      toast.error("오류가 발생했습니다.")
+    } finally {
+      setIsLoading(false)
+    }
   }
 
   return (
@@ -65,8 +81,8 @@ export function LoginForm() {
             </Field>
 
             <Field>
-              <Button type="submit" className="w-full">
-                로그인하기
+              <Button type="submit" className="w-full" disabled={isLoading}>
+                {isLoading ? "로그인 중..." : "로그인하기"}
               </Button>
               <FieldDescription className="text-center">
                 계정이 없으신가요? <Link href="/signup">회원가입</Link>
