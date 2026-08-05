@@ -1,7 +1,8 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import Link from "next/link"
+import { useRouter } from "next/navigation"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { toast } from "sonner"
@@ -24,14 +25,21 @@ import {
   FieldLabel,
 } from "@/components/ui/field"
 import { signupSchema, type SignupValues } from "@/lib/validations/signup"
-import { registerUser } from "@/lib/auth-storage"
+import { registerUser, getCurrentUser } from "@/lib/auth-storage"
 
 export function SignupForm() {
+  const router = useRouter()
   const [isLoading, setIsLoading] = useState(false)
   const form = useForm<SignupValues>({
     resolver: zodResolver(signupSchema),
     defaultValues: { email: "", password: "", confirmPassword: "" },
   })
+
+  useEffect(() => {
+    if (getCurrentUser()) {
+      router.replace("/")
+    }
+  }, [router])
 
   async function onSubmit(values: SignupValues) {
     setIsLoading(true)
@@ -40,13 +48,15 @@ export function SignupForm() {
       if (result.success) {
         toast.success("회원가입되었습니다! 로그인해주세요.")
         form.reset()
-        // 실제 앱에서는 여기서 /login으로 리다이렉트
+        setTimeout(() => {
+          router.push("/login")
+        }, 800)
       } else {
         toast.error(result.error || "회원가입에 실패했습니다.")
+        setIsLoading(false)
       }
     } catch (error) {
       toast.error("오류가 발생했습니다.")
-    } finally {
       setIsLoading(false)
     }
   }
