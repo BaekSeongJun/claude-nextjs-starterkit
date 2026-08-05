@@ -22,24 +22,24 @@ import {
   FieldGroup,
   FieldLabel,
 } from "@/components/ui/field"
-import { loginSchema, type LoginValues } from "@/lib/validations/login"
+import { signupSchema, type SignupValues } from "@/lib/validations/signup"
 
-export function LoginForm() {
-  const form = useForm<LoginValues>({
-    resolver: zodResolver(loginSchema),
-    defaultValues: { email: "", password: "" },
+export function SignupForm() {
+  const form = useForm<SignupValues>({
+    resolver: zodResolver(signupSchema),
+    defaultValues: { email: "", password: "", confirmPassword: "" },
   })
 
-  function onSubmit(values: LoginValues) {
+  function onSubmit(values: SignupValues) {
     console.log(values)
-    toast.success("로그인 폼 검증 성공 (데모)")
+    toast.success("회원가입 폼 검증 성공 (데모)")
   }
 
   return (
     <Card>
       <CardHeader>
-        <CardTitle>로그인</CardTitle>
-        <CardDescription>이메일과 비밀번호를 입력해주세요.</CardDescription>
+        <CardTitle>회원가입</CardTitle>
+        <CardDescription>새 계정을 만들기 위해 정보를 입력해주세요.</CardDescription>
       </CardHeader>
       <CardContent>
         <form onSubmit={form.handleSubmit(onSubmit)}>
@@ -65,11 +65,19 @@ export function LoginForm() {
             </Field>
 
             <Field>
+              <FieldLabel>비밀번호 확인</FieldLabel>
+              <FieldContent>
+                <Input type="password" {...form.register("confirmPassword")} />
+                <FieldError errors={form.formState.errors.confirmPassword ? [form.formState.errors.confirmPassword] : undefined} />
+              </FieldContent>
+            </Field>
+
+            <Field>
               <Button type="submit" className="w-full">
-                로그인하기
+                회원가입하기
               </Button>
               <FieldDescription className="text-center">
-                계정이 없으신가요? <Link href="/signup">회원가입</Link>
+                이미 계정이 있으신가요? <Link href="/login">로그인</Link>
               </FieldDescription>
             </Field>
           </FieldGroup>
